@@ -2,126 +2,121 @@
 #include <iostream>
 #include <string>
 
-// Declaración de la clase Television
 class Television
 {
 public:
-    Television() : encendida(false), canal(1), volumen(10) {}
+    Television() : on(false), channel(1), volume(10) {}
 
-    void encenderApagar();
-    bool estaEncendida() const;
-    void cambiarCanal(int nuevoCanal);
-    int obtenerCanal() const;
-    void ajustarVolumen(int nuevoVolumen);
-    int obtenerVolumen() const;
+    void turnOnTurnOff();
+    bool isOn() const;
+    void changeChannel(int newChannel);
+    int getChannel() const;
+    void setVolume(int newVolume);
+    int getVolume() const;
 
 private:
-    bool encendida;
-    int canal;
-    int volumen;
+    bool on;
+    int channel;
+    int volume;
 };
 
-// Implementación de los métodos de Television
-void Television::encenderApagar()
+void Television::turnOnTurnOff()
 {
-    encendida = !encendida;
+    on = !on;
 }
 
-bool Television::estaEncendida() const
+bool Television::isOn() const
 {
-    return encendida;
+    return on;
 }
 
-void Television::cambiarCanal(int nuevoCanal)
+void Television::changeChannel(int newChannel)
 {
-    if (encendida && nuevoCanal >= 1 && nuevoCanal <= 100)
+    if (on && newChannel >= 1 && newChannel <= 100)
     {
-        canal = nuevoCanal;
+        channel = newChannel;
     }
 }
 
-int Television::obtenerCanal() const
+int Television::getChannel() const
 {
-    return canal;
+    return channel;
 }
 
-void Television::ajustarVolumen(int nuevoVolumen)
+void Television::setVolume(int newVolume)
 {
-    if (encendida && nuevoVolumen >= 0 && nuevoVolumen <= 100)
+    if (on && newVolume >= 0 && newVolume <= 100)
     {
-        volumen = nuevoVolumen;
+        volume = newVolume;
     }
 }
 
-int Television::obtenerVolumen() const
+int Television::getVolume() const
 {
-    return volumen;
+    return volume;
 }
 
-// Funciones de prueba individuales
-
-void testEncenderApagarTelevision(TestEvaluator &te)
+void testTurnOnTurnOffTV(TestEvaluator &te)
 {
     Television tv;
-    tv.encenderApagar();
-    te.evaluate("Encender televisión", tv.estaEncendida() == true);
+    tv.turnOnTurnOff();
+    te.evaluate("Encender televisión", tv.isOn() == true);
 
-    tv.encenderApagar();
-    te.evaluate("Apagar televisión", tv.estaEncendida() == false);
+    tv.turnOnTurnOff();
+    te.evaluate("Apagar televisión", tv.isOn() == false);
 }
 
-void testCambiarCanalCuandoEncendida(TestEvaluator &te)
+void testChangeChannelWhenOn(TestEvaluator &te)
 {
     Television tv;
-    tv.encenderApagar(); // Encender la TV
-    tv.cambiarCanal(5);
-    te.evaluate("Cambiar al canal 5 cuando está encendida", tv.obtenerCanal() == 5);
+    tv.turnOnTurnOff();
+    tv.changeChannel(5);
+    te.evaluate("Cambiar al canal 5 cuando está encendida", tv.getChannel() == 5);
 }
 
-void testCambiarCanalCuandoApagada(TestEvaluator &te)
+void testChangeChannelWhenOff(TestEvaluator &te)
 {
     Television tv;
-    tv.encenderApagar(); // Encender y luego apagar la TV
-    tv.cambiarCanal(5);
-    tv.encenderApagar(); // Apagar la TV
-    tv.cambiarCanal(10);
-    te.evaluate("No cambia de canal si está apagada", tv.obtenerCanal() == 5);
+    tv.turnOnTurnOff();
+    tv.changeChannel(5);
+    tv.turnOnTurnOff();
+    tv.changeChannel(10);
+    te.evaluate("No cambia de canal si está apagada", tv.getChannel() == 5);
 }
 
-void testAjustarVolumenCuandoEncendida(TestEvaluator &te)
+void testSetVolumeWhenOn(TestEvaluator &te)
 {
     Television tv;
-    tv.encenderApagar(); // Encender la TV
-    tv.ajustarVolumen(25);
-    te.evaluate("Ajustar volumen a 25 cuando está encendida", tv.obtenerVolumen() == 25);
+    tv.turnOnTurnOff();
+    tv.setVolume(25);
+    te.evaluate("Ajustar volumen a 25 cuando está encendida", tv.getVolume() == 25);
 }
 
-void testAjustarVolumenCuandoApagada(TestEvaluator &te)
+void testSetVolumeWhenOff(TestEvaluator &te)
 {
     Television tv;
-    tv.encenderApagar(); // Encender y luego apagar la TV
-    tv.ajustarVolumen(25);
-    tv.encenderApagar(); // Apagar la TV
-    tv.ajustarVolumen(50);
-    te.evaluate("No cambia volumen si está apagada", tv.obtenerVolumen() == 25);
+    tv.turnOnTurnOff();
+    tv.setVolume(25);
+    tv.turnOnTurnOff();
+    tv.setVolume(50);
+    te.evaluate("No cambia volumen si está apagada", tv.getVolume() == 25);
 }
 
-// Función para ejecutar todas las pruebas
-void ejecutarPruebasTelevision(TestEvaluator &te)
+void executeTVTest(TestEvaluator &te)
 {
     te.title("Test de la clase Television");
 
-    testEncenderApagarTelevision(te);
-    testCambiarCanalCuandoEncendida(te);
-    testCambiarCanalCuandoApagada(te);
-    testAjustarVolumenCuandoEncendida(te);
-    testAjustarVolumenCuandoApagada(te);
+    testTurnOnTurnOffTV(te);
+    testChangeChannelWhenOn(te);
+    testChangeChannelWhenOff(te);
+    testSetVolumeWhenOn(te);
+    testSetVolumeWhenOff(te);
 }
 
 int main()
 {
     TestEvaluator te;
-    ejecutarPruebasTelevision(te);
+    executeTVTest(te);
     te.summary();
     return 0;
 }
